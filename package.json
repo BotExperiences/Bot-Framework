@@ -1,0 +1,31 @@
+{
+  "name": "twitch-bot-framework",
+  "version": "0.1.0",
+  "description": "a framework to get going with a twitch chatbot",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "ava"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BestieJoel/Twitch-Bot-Framework.git"
+  },
+  "author": "Joel Kuntz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BestieJoel/Twitch-Bot-Framework/issues"
+  },
+  "homepage": "https://github.com/BestieJoel/Twitch-Bot-Framework#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "tmi.js": "^1.5.0",
+    "typescript": "^3.9.5"
+  },
+  "devDependencies": {
+    "@types/dotenv": "^8.2.0",
+    "@types/node": "^14.0.14",
+    "@types/tmi.js": "^1.4.0",
+    "ava": "^3.9.0"
+  }
+}

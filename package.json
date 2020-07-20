@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "test": "ava"
+    "test": "npm run build && ava --verbose"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,7 @@
     "typescript": "^3.9.5"
   },
   "devDependencies": {
+    "@ava/typescript": "^1.1.1",
     "@types/dotenv": "^8.2.0",
     "@types/node": "^14.0.14",
     "@types/tmi.js": "^1.4.0",

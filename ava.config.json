@@ -1,0 +1,8 @@
+{
+    "typescript": {
+        "rewritePaths": {
+            "src/": "lib/",
+            "tests/": "lib/"
+        }
+    }
+}

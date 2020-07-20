@@ -1,64 +1,110 @@
 import test from 'ava';
 import Bot, { ChatClient } from '../src/Bot';
+import Service from '../src/Services';
 
 class TestChatClient implements ChatClient {
-    chatLog: string[];
+  chatLog: string[];
 
-    constructor(chatLog: string[]) {
-        this.chatLog = chatLog;
-    }
+  constructor(chatLog: string[]) {
+    this.chatLog = chatLog;
+  }
 
-    _onMessage: (a:string) => void;
-    onMessage(message: string) {
-        if (this._onMessage && typeof this._onMessage === 'function') {
-            this._onMessage(message);
-        }
+  _onMessage: (channel: string, userstate: any, msg: string, self: boolean) => void;
+  onMessage(channel: string, userstate: any, msg: string, self: boolean) {
+    if (this._onMessage && typeof this._onMessage === 'function') {
+      this._onMessage(channel, userstate, msg, self);
     }
+  }
 
-    _onConnect: () => void;
-    onConnect() {
-        if (this._onConnect && typeof this._onConnect === 'function') {
-            this._onConnect();
-        }
+  _onConnect: () => void;
+  onConnect() {
+    if (this._onConnect && typeof this._onConnect === 'function') {
+      this._onConnect();
     }
+  }
 
-    connect() {
-        this.onConnect();
-    }
+  connect() {
+    this.onConnect();
+  }
 
-    on(event: 'message' | 'connected', callback: () => any) {
-        if (event === 'message') {
-            this._onMessage = callback;
-        }
-        else if (event === 'connected') {
-            this._onConnect = callback;
-        }
+  on(event: 'message' | 'connected', callback: () => any) {
+    if (event === 'message') {
+      this._onMessage = callback;
     }
+    else if (event === 'connected') {
+      this._onConnect = callback;
+    }
+  }
 
-    say(channel: string, message: string) {
-        this.chatLog.push(`Test: ch<${channel}> : ${message}`)
-    }
+  say(channel: string, message: string) {
+    this.chatLog.push(`Test: ch<${channel}> : ${message}`)
+  }
 }
 
-let chatLog: string[] = [];
-let chatClient = new TestChatClient(chatLog);
-
-let bot = new Bot(
+test('connectedMessage displays', t => {
+  let chatLog: string[] = [];
+  let chatClient = new TestChatClient(chatLog);
+  new Bot(
     {
-        banList: [],
-        channel: 'test-runner',
-        silent: false,
-        connectedMessage: 'the test-runner bot has arrived in chat'
+      banList: [],
+      channel: 'test-runner',
+      silent: false,
+      connectedMessage: 'the test-runner bot has arrived in chat'
     },
     chatClient,
     {},
     []
-);
+  );
+  t.is(chatLog.length, 1, 'chatlog has single entry');
+  t.is(chatLog[0], 'Test: ch<test-runner> : the test-runner bot has arrived in chat');
+});
 
-chatClient.connect();
+test('no default connectedMessage', t => {
+  let chatLog: string[] = [];
+  let chatClient = new TestChatClient(chatLog);
+  new Bot(
+    {
+      banList: [],
+      channel: 'test-runner',
+      silent: false
+    },
+    chatClient,
+    {},
+    []
+  );
+  t.is(chatLog.length, 0, 'chatlog is empty');
+});
 
-test('connectedMessage displays', t => {
-	t.true(
-        chatLog.length === 1 && chatLog.includes('the test-runner bot has arrived in chat')
-    )
+test('it handles messages properly', t => {
+  let chatLog: string[] = [];
+  let chatClient = new TestChatClient(chatLog);
+  let service: Service = {
+    bot: null,
+    onConnected() {},
+    onMessage(channel: string, userstate: any, msg: string, self: boolean) {
+      chatLog.push(`Test: ch<${channel}> : ${msg}`);
+    }
+  };
+  new Bot(
+    {
+      banList: [],
+      channel: 'test-runner',
+      silent: false
+    },
+    chatClient,
+    {},
+    [
+      service,
+      service,
+      service
+    ]
+  );
+
+  chatClient.onMessage('test-runner', {}, 'Welcome friends, I\'m your friendly neighborhood bot', false);
+
+  console.log('chatLog---', chatLog);
+  t.is(chatLog.length, 3, 'chatlog has single entry');
+  t.is(chatLog[0], 'Test: ch<test-runner> : Welcome friends, I\'m your friendly neighborhood bot');
+  t.is(chatLog[1], 'Test: ch<test-runner> : Welcome friends, I\'m your friendly neighborhood bot');
+  t.is(chatLog[2], 'Test: ch<test-runner> : Welcome friends, I\'m your friendly neighborhood bot');
 });

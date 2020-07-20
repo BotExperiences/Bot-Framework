@@ -1,5 +1,5 @@
 import * as tmi from 'tmi.js';
-import BaseService from './Services';
+import Service from './Services';
 
 export interface BotConfig {
   channel: string;
@@ -23,7 +23,7 @@ export default class Bot {
     config: BotConfig,
     client: ChatClient,
     context: any,
-    services: BaseService[] = []
+    services: Service[] = []
   ) {
     // Save references
     this.config = config;
@@ -57,7 +57,7 @@ export default class Bot {
   config: BotConfig;
   context: any;
   chatClient: ChatClient;
-  services: BaseService[];
+  services: Service[];
 
   onConnected(addr: string, port: number) {
     if (!this.config.silent && this.config.connectedMessage) this.sendChatMessage(this.config.connectedMessage);

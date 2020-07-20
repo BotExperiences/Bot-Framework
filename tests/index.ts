@@ -9,8 +9,8 @@ class TestChatClient implements ChatClient {
     this.chatLog = chatLog;
   }
 
-  _onMessage: (channel: string, userstate: any, msg: string, self: boolean) => void;
-  onMessage(channel: string, userstate: any, msg: string, self: boolean) {
+  _onMessage: (channel: string, userstate: UserState, msg: string, self: boolean) => void;
+  onMessage(channel: string, userstate: UserState, msg: string, self: boolean) {
     if (this._onMessage && typeof this._onMessage === 'function') {
       this._onMessage(channel, userstate, msg, self);
     }
@@ -27,7 +27,7 @@ class TestChatClient implements ChatClient {
     this.onConnect();
   }
 
-  on(event: 'message' | 'connected', callback: () => any) {
+  on(event: 'message' | 'connected', callback: () => void) {
     if (event === 'message') {
       this._onMessage = callback;
     }
@@ -42,8 +42,8 @@ class TestChatClient implements ChatClient {
 }
 
 test('connectedMessage displays', t => {
-  let chatLog: string[] = [];
-  let chatClient = new TestChatClient(chatLog);
+  const chatLog: string[] = [];
+  const chatClient = new TestChatClient(chatLog);
   new Bot(
     {
       banList: [],
@@ -60,8 +60,8 @@ test('connectedMessage displays', t => {
 });
 
 test('no default connectedMessage', t => {
-  let chatLog: string[] = [];
-  let chatClient = new TestChatClient(chatLog);
+  const chatLog: string[] = [];
+  const chatClient = new TestChatClient(chatLog);
   new Bot(
     {
       banList: [],
@@ -76,12 +76,13 @@ test('no default connectedMessage', t => {
 });
 
 test('it handles messages properly', t => {
-  let chatLog: string[] = [];
-  let chatClient = new TestChatClient(chatLog);
-  let service: Service = {
+  const chatLog: string[] = [];
+  const chatClient = new TestChatClient(chatLog);
+  const service: Service = {
     bot: null,
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     onConnected() {},
-    onMessage(channel: string, userstate: any, msg: string, self: boolean) {
+    onMessage(channel: string, userstate: UserState, msg: string/*, self: boolean */) {
       chatLog.push(`Test: ch<${channel}> : ${msg}`);
     }
   };
@@ -100,7 +101,7 @@ test('it handles messages properly', t => {
     ]
   );
 
-  chatClient.onMessage('test-runner', {}, 'Welcome friends, I\'m your friendly neighborhood bot', false);
+  chatClient.onMessage('test-runner', { "display-name": 'test-bot' }, 'Welcome friends, I\'m your friendly neighborhood bot', true);
 
   console.log('chatLog---', chatLog);
   t.is(chatLog.length, 3, 'chatlog has single entry');

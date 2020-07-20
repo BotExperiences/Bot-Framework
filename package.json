@@ -1,5 +1,5 @@
 {
-  "name": "twitch-bot-framework",
+  "name": "bot-framework",
   "version": "0.1.0",
   "description": "a framework to get going with a twitch chatbot",
   "main": "index.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BestieJoel/Twitch-Bot-Framework.git"
+    "url": "git+https://github.com/BotExperiences/Bot-Framework.git"
   },
   "author": "Joel Kuntz",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/BestieJoel/Twitch-Bot-Framework/issues"
+    "url": "https://github.com/BotExperiences/Bot-Framework/issues"
   },
-  "homepage": "https://github.com/BestieJoel/Twitch-Bot-Framework#readme",
+  "homepage": "https://github.com/BotExperiences/Bot-Framework#readme",
   "dependencies": {
     "dotenv": "^8.2.0",
     "tmi.js": "^1.5.0",

@@ -1,1 +1,1 @@
-# Twitch-Bot-Framework
+# Bot-Framework

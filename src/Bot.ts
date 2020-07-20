@@ -69,8 +69,7 @@ export default class Bot {
     });
   }
 
-  // TODO userstate interface
-  onMessage(channel: string, userstate: { 'display-name': string }, msg: string, self: boolean): void {
+  onMessage(channel: string, userstate: UserState, msg: string, self: boolean): void {
     if (this.config.banList.includes(userstate["display-name"])) return;
     // TODO logging;
     // console.log('onMessage', channel, userstate["display-name"], msg);

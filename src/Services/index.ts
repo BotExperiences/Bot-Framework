@@ -4,7 +4,6 @@ import Bot from "../Bot";
 
 export default class Service {
     bot: Bot;
-    // TODO userstate interface
-    onMessage(channel: string, userstate: { 'display-name': string }, msg: string, self: boolean): void {}
+    onMessage(channel: string, userstate: UserState, msg: string, self: boolean): void {}
     onConnected(): void {}
 }

@@ -5,5 +5,6 @@ import Bot from "../Bot";
 export default class Service {
     bot: Bot;
     onMessage(channel: string, userstate: UserState, msg: string, self: boolean): void {}
+    onMonetization(channel: string, userstate: UserState, msg: string, monetization: any): void {}
     onConnected(): void {}
 }

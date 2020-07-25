@@ -1,19 +1,24 @@
-// import * as tmi from 'tmi.js';
 import Service from './Services';
 
 export interface BotConfig {
   channel: string;
   banList: string[];
-  // credentials: {
-  //   username: string;
-  //   password: string;
-  // }
   silent: boolean;
   connectedMessage?: string;
 }
 
+type tmiEvent = 'message'
+  | 'connected'
+  | 'anongiftpaidupgrade'
+  | 'cheer'
+  | 'giftpaidupgrade'
+  | 'resub'
+  | 'subgift'
+  | 'submysterygift'
+  | 'subscription';
+
 export interface ChatClient {
-  on: (event: 'message' | 'connected', callback: () => void) => void;
+  on: (event: tmiEvent, callback: (...args: any[]) => void) => void;
   connect: () => void;
   say: (channel: string, message: string) => void;
 }
@@ -37,22 +42,34 @@ export default class Bot {
     });
 
     this.chatClient = client;
+    //#region setup chatClient hooks
     this.chatClient.on('message', this.onMessage.bind(this));
     this.chatClient.on('connected', this.onConnected.bind(this));
+    this.chatClient.on('anongiftpaidupgrade', (channel: string, username: string, userstate: UserState) => {
+      this.onMonetization(channel, userstate, '', { type: 'anongiftpaidupgrade' });
+    });
+    this.chatClient.on('cheer', (channel: string, userstate: UserState, message) => {
+      this.onMonetization(channel, userstate, message, { type: 'cheer' });
+    });
+    this.chatClient.on('giftpaidupgrade', (channel: string, username: string, sender: string, userstate: UserState) => {
+      this.onMonetization(channel, userstate, '', { type: 'giftpaidupgrade', sender });
+    });
+    this.chatClient.on('resub', (channel: string, username: string, months: number, message: string, userstate: UserState, methods: any) => {
+      this.onMonetization(channel, userstate, message, { type: 'resub', months, methods });
+    });
+    this.chatClient.on('subgift', (channel: string, username: string, streakMonths: number, recipient: string, methods: any, userstate: UserState) => {
+      this.onMonetization(channel, userstate, '', { type: 'subgift', streakMonths, recipient, methods });
+    });
+    this.chatClient.on('submysterygift', (channel: string, username: string, numbOfSubs: number, methods: any, userstate: UserState) => {
+      this.onMonetization(channel, userstate, '', { type: 'submysterygift', numbOfSubs, methods });
+    });
+    this.chatClient.on('subscription', (channel, username, method, message, userstate) => {
+      this.onMonetization(channel, userstate, message, { type: 'subscription', method })
+    });
+    //#endregion
+
     // Connect to chat!
     this.chatClient.connect();
-
-    // Setup tmi.js
-    // this.tmiClient = tmi.client({
-    //   options: { debug: true },
-    //   identity: {
-    //     username: config.credentials.username,
-    //     password: config.credentials.password
-    //   },
-    //   channels: [ config.credentials.channel ]
-    // });
-    // this.tmiClient.on('message', this.onMessage.bind(this));
-    // this.tmiClient.on('connected', this.onConnected.bind(this));
   }
 
   config: BotConfig;
@@ -75,6 +92,12 @@ export default class Bot {
     // console.log('onMessage', channel, userstate["display-name"], msg);
     this.services.forEach((service) => {
       service.onMessage(channel, userstate, msg, self);
+    });
+  }
+
+  onMonetization(channel: string, userstate: UserState, msg: string, monetization: any): void {
+    this.services.forEach((service) => {
+      service.onMonetization(channel, userstate, msg, monetization);
     });
   }
 

@@ -21,6 +21,8 @@ export interface ChatClient {
   on: (event: tmiEvent, callback: (...args: any[]) => void) => void;
   connect: () => void;
   say: (channel: string, message: string) => void;
+  mods: (channel: string) => Promise<string[]>;
+  vips: (channel: string) => Promise<string[]>;
 }
 
 export default class Bot {
@@ -45,6 +47,8 @@ export default class Bot {
     //#region setup chatClient hooks
     this.chatClient.on('message', this.onMessage.bind(this));
     this.chatClient.on('connected', this.onConnected.bind(this));
+
+    // Monetization
     this.chatClient.on('anongiftpaidupgrade', (channel: string, username: string, userstate: UserState) => {
       this.onMonetization(channel, userstate, '', { type: 'anongiftpaidupgrade' });
     });
@@ -77,13 +81,18 @@ export default class Bot {
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   context: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   chatClient: ChatClient;
-  services: Service[];
+  private services: Service[];
+  mods: string[] = [];
+  vips: string[] = [];
 
   onConnected(/* addr: string, port: number */): void {
     if (!this.config.silent && this.config.connectedMessage) this.sendChatMessage(this.config.connectedMessage);
     this.services.forEach((service) => {
       service.onConnected();
     });
+    // Get mod and VIP lists
+    this.chatClient.mods(this.config.channel).then(data => this.mods = data);
+    this.chatClient.vips(this.config.channel).then(data => this.vips = data);
   }
 
   onMessage(channel: string, userstate: UserState, msg: string, self: boolean): void {

@@ -9,6 +9,9 @@ class TestChatClient implements ChatClient {
     this.chatLog = chatLog;
   }
 
+  mods: any;
+  vips: any;
+
   _onMessage: (channel: string, userstate: UserState, msg: string, self: boolean) => void;
   onMessage(channel: string, userstate: UserState, msg: string, self: boolean) {
     if (this._onMessage && typeof this._onMessage === 'function') {
@@ -84,7 +87,8 @@ test('it handles messages properly', t => {
     onConnected() {},
     onMessage(channel: string, userstate: UserState, msg: string/*, self: boolean */) {
       chatLog.push(`Test: ch<${channel}> : ${msg}`);
-    }
+    },
+    onMonetization(){}
   };
   new Bot(
     {

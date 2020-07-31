@@ -1,22 +1,39 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "esModuleInterop": true,
-        "target": "ES6",
-        "noImplicitAny": true,
-        "moduleResolution": "node",
-        "outDir": "lib",
-        "baseUrl": ".",
-        "paths": {
-            "*": [
-                "types/*",
-                "node_modules/*"
-            ]
-        }
+  "compilerOptions": {
+    "lib": [
+      "es5",
+      "es6",
+      "es7",
+      "es2015",
+      "es2016",
+      "es2017",
+      "es2018",
+      "esnext"
+    ],
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "target": "ES6",
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "outDir": "lib",
+    "baseUrl": "./src",
+    "rootDir": "./src",
+    "paths": {
+      "*": [
+        "types/*",
+        "node_modules/*"
+      ]
     },
-    "include": [
-        "types/**/*",
-        "src/**/*",
-        "tests/**/*"
-    ]
+    "declaration": true,
+    "declarationMap": true,
+    "inlineSourceMap": true,
+    "inlineSources": true
+  },
+  "include": [
+    "types/**/*",
+    "src/**/*"
+  ],
+  "exclude": [
+    "src/tests/**/*"
+  ]
 }

@@ -1,6 +1,6 @@
 import test from 'ava';
-import Bot, { ChatClient } from '../src/Bot';
-import Service from '../src/Services';
+import Bot, { ChatClient } from '../Bot';
+import Service from '../Services';
 
 class TestChatClient implements ChatClient {
   chatLog: string[];

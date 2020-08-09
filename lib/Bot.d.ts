@@ -5,7 +5,7 @@ export interface BotConfig {
     silent: boolean;
     connectedMessage?: string;
 }
-declare type tmiEvent = 'message' | 'connected' | 'anongiftpaidupgrade' | 'cheer' | 'giftpaidupgrade' | 'resub' | 'subgift' | 'submysterygift' | 'subscription';
+declare type tmiEvent = 'message' | 'connected' | 'anongiftpaidupgrade' | 'cheer' | 'giftpaidupgrade' | 'resub' | 'subgift' | 'submysterygift' | 'subscription' | 'join' | 'part';
 export interface ChatClient {
     on: (event: tmiEvent, callback: (...args: any[]) => void) => void;
     connect: () => void;
@@ -25,6 +25,8 @@ export default class Bot {
     onConnected(): void;
     onMessage(channel: string, userstate: UserState, msg: string, self: boolean): void;
     onMonetization(channel: string, userstate: UserState, msg: string, monetization: any): void;
+    onJoin(channel: string, username: string, self: boolean): void;
+    onPart(channel: string, username: string, self: boolean): void;
     sendChatMessage(message: string): void;
 }
 export {};

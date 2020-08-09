@@ -15,7 +15,9 @@ type tmiEvent = 'message'
   | 'resub'
   | 'subgift'
   | 'submysterygift'
-  | 'subscription';
+  | 'subscription'
+  | 'join'
+  | 'part';
 
 export interface ChatClient {
   on: (event: tmiEvent, callback: (...args: any[]) => void) => void;
@@ -47,6 +49,8 @@ export default class Bot {
     //#region setup chatClient hooks
     this.chatClient.on('message', this.onMessage.bind(this));
     this.chatClient.on('connected', this.onConnected.bind(this));
+    this.chatClient.on('join', this.onJoin.bind(this));
+    this.chatClient.on('part', this.onPart.bind(this));
 
     // Monetization
     this.chatClient.on('anongiftpaidupgrade', (channel: string, username: string, userstate: UserState) => {
@@ -107,6 +111,18 @@ export default class Bot {
   onMonetization(channel: string, userstate: UserState, msg: string, monetization: any): void {
     this.services.forEach((service) => {
       service.onMonetization(channel, userstate, msg, monetization);
+    });
+  }
+
+  onJoin(channel: string, username: string, self: boolean): void {
+    this.services.forEach((service) => {
+      service.onJoin(channel, username, self);
+    });
+  }
+
+  onPart(channel: string, username: string, self: boolean): void {
+    this.services.forEach((service) => {
+      service.onPart(channel, username, self);
     });
   }
 

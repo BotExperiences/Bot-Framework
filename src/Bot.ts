@@ -19,6 +19,8 @@ type tmiEvent = 'message'
   | 'join'
   | 'part';
 
+import { CommonUserstate } from 'tmi.js'
+
 export interface ChatClient {
   on: (event: tmiEvent, callback: (...args: any[]) => void) => void;
   connect: () => void;
@@ -26,6 +28,9 @@ export interface ChatClient {
   mods: (channel: string) => Promise<string[]>;
   vips: (channel: string) => Promise<string[]>;
 }
+
+
+export interface UserState extends CommonUserstate { } // eslint-disable-line @typescript-eslint/no-empty-interface
 
 export default class Bot {
   constructor(

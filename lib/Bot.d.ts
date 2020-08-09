@@ -6,12 +6,15 @@ export interface BotConfig {
     connectedMessage?: string;
 }
 declare type tmiEvent = 'message' | 'connected' | 'anongiftpaidupgrade' | 'cheer' | 'giftpaidupgrade' | 'resub' | 'subgift' | 'submysterygift' | 'subscription' | 'join' | 'part';
+import { CommonUserstate } from 'tmi.js';
 export interface ChatClient {
     on: (event: tmiEvent, callback: (...args: any[]) => void) => void;
     connect: () => void;
     say: (channel: string, message: string) => void;
     mods: (channel: string) => Promise<string[]>;
     vips: (channel: string) => Promise<string[]>;
+}
+export interface UserState extends CommonUserstate {
 }
 export default class Bot {
     constructor(config: BotConfig, client: ChatClient, context: any, // eslint-disable-line @typescript-eslint/no-explicit-any

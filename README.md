@@ -1,8 +1,13 @@
 # Bot-Framework
 
-A node.js library for making your own chat bots. The Bot class orchestrates the message handlers and sending messages across passed in Services.
+A node.js library for making your own chat bots (twitch only currently). The Bot class orchestrates the message handlers and sending messages across passed in Services.
+
+## Example
+
+See an [example bot](https://github.com/BotExperiences/Example-Bot) using this framework
 
 ## Setup
+
 Import the Bot to your app and configure it with Services and your chat client (tmi.js currently)
 
 ```ts
@@ -23,7 +28,7 @@ new Bot(
 );
 ```
 
-### Services
+## Services
 
 A service can do anything from welcoming users, reminding you to drink water, or controlling a game. Extend this class to add functionality to your bot
 

@@ -1,5 +1,5 @@
 {
-  "name": "bot-framework",
+  "name": "@bot-experiences/framework",
   "version": "0.1.0",
   "type": "commonjs",
   "types": "./lib/Bot.d.ts",
@@ -16,7 +16,7 @@
     "url": "git+https://github.com/BotExperiences/Bot-Framework.git"
   },
   "author": "Joel Kuntz",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/BotExperiences/Bot-Framework/issues"
   },
@@ -31,5 +31,9 @@
     "ava": "^3.9.0",
     "eslint": "^7.5.0",
     "typescript": "^3.9.7"
+  },
+  "directories": {
+    "lib": "lib",
+    "test": "src/tests"
   }
 }
